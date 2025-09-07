@@ -4,11 +4,12 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/todolist
     username: postgres
-    password:
+    password: postgres
     driver-class-name: org.postgresql.Driver
   jpa:
     show-sql: true
     hibernate:
-      ddl-auto: update
+      # ddl-auto: update
+      ddl-auto: none
     properties:
       hibernate.format_sql: true
