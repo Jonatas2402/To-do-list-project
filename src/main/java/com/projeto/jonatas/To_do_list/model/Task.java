@@ -8,7 +8,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "task")
 @Data
-public class TaskModel {
+public class Task {
 
    @Id
    @Column(name = "id")
