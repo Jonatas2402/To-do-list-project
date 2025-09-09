@@ -9,7 +9,6 @@ import java.util.UUID;
 @Table(name = "task")
 @Data
 public class Task {
-
    @Id
    @Column(name = "id")
    @GeneratedValue
@@ -23,6 +22,4 @@ public class Task {
 
    @Column(name = "status")
    private Status status;
-
-
 }
