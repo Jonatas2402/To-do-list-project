@@ -26,11 +26,15 @@ public class TaskService {
     public List<Task> findAll(){
         return repository.findAll();
     }
-    public Task findById(UUID id){
-        return repository.findById(id).orElseThrow(() -> new RuntimeException("Task not found"));
-    }
 
-    public void update(Task task){
-        repository.save(task);
+    public Task findById(UUID id){
+        return repository.findById(id).orElseThrow(() -> new RuntimeException("Not found"));
+    }
+    public Task update(UUID id,Task task){
+        Task task1 = findById(id);
+        task.setTitle(task.getTitle());
+        task.setDescription(task.getDescription());
+        task.setStatus(task.getStatus());
+        return repository.save(task1);
     }
 }

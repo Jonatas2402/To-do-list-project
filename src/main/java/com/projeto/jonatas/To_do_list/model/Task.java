@@ -1,6 +1,7 @@
 package com.projeto.jonatas.To_do_list.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 import java.util.UUID;
@@ -14,11 +15,12 @@ public class Task {
    @GeneratedValue
    private UUID id;
 
-   @Column(name = "title")
+   @Column(name = "title", nullable = false)
+   @NotBlank(message = "Campo Obrigatório")
    private String title;
 
-   @Column(name = "description")
-   private String descriptiom;
+   @Column(name = "description", nullable = false)
+   private String description;
 
    @Column(name = "status")
    private Status status;
