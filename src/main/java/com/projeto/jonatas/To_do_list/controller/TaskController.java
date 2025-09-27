@@ -36,8 +36,6 @@ public class TaskController {
 
     @PutMapping("/{id}")
     public ResponseEntity<TaskResponseDTO> atualizar(@PathVariable Long id, @RequestBody @Valid TaskRequestDTO requestDTO) {
-        // Lógica para atualizar a tarefa
-        // Por exemplo, buscar a tarefa pelo ID, atualizar os campos e salvar novamente
         TaskResponseDTO responseDTO = service.atualizar(id, requestDTO);
         return ResponseEntity.ok(responseDTO);
     }
