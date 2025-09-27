@@ -1,13 +1,13 @@
 package com.projeto.jonatas.To_do_list.controller;
 
+import com.projeto.jonatas.To_do_list.DTOS.TaskRequestDTO;
+import com.projeto.jonatas.To_do_list.DTOS.TaskResponseDTO;
 import com.projeto.jonatas.To_do_list.model.Task;
 import com.projeto.jonatas.To_do_list.service.TaskService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/task")
@@ -17,24 +17,30 @@ public class TaskController {
     private final TaskService service;
 
     @PostMapping
-    public Task salvar(@RequestBody @Valid Task task) {
-        return service.salvar(task);
+    public ResponseEntity<TaskResponseDTO> salvar(@RequestBody @Valid Task task) {
+        TaskResponseDTO responseDTO = service.salvar(task);
+        return ResponseEntity.ok(responseDTO);
     }
 
-    @DeleteMapping("{id}")
-    public void deletar(@PathVariable("id") String id) {
-        var obterId = UUID.fromString(id);
-        service.deletar(obterId);
+    @GetMapping("/{id}")
+    public ResponseEntity<TaskResponseDTO> buscarPorId(@PathVariable("id") Long id) {
+        TaskResponseDTO responseDTO = service.buscarPorId(id);
+        return ResponseEntity.ok(responseDTO);
     }
 
-    @GetMapping
-    public List<Task> lista(){
-        return service.findAll();
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deletar(@PathVariable("id") Long id) {
+        service.deletar(id);
+        return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("{id}")
-    public Task update(@PathVariable("id") String id, @Valid  @RequestBody Task task){
-        var obterId = UUID.fromString(id);
-        return service.update(obterId, task);
+    @PutMapping("/{id}")
+    public ResponseEntity<TaskResponseDTO> atualizar(@PathVariable Long id, @RequestBody @Valid TaskRequestDTO requestDTO) {
+        // Lógica para atualizar a tarefa
+        // Por exemplo, buscar a tarefa pelo ID, atualizar os campos e salvar novamente
+        TaskResponseDTO responseDTO = service.atualizar(id, requestDTO);
+        return ResponseEntity.ok(responseDTO);
     }
 }
+
+

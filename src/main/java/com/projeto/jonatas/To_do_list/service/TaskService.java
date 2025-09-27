@@ -1,40 +1,62 @@
 package com.projeto.jonatas.To_do_list.service;
 
+import com.projeto.jonatas.To_do_list.DTOS.TaskRequestDTO;
+import com.projeto.jonatas.To_do_list.DTOS.TaskResponseDTO;
 import com.projeto.jonatas.To_do_list.model.Task;
 import com.projeto.jonatas.To_do_list.repository.TaskRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor //Cria construtor em tudo que for instanciado com final
 public class TaskService {
 
     private final TaskRepository repository;
-    // SALVA TASK
-    public Task salvar (Task task){
-        return  repository.save(task);
+
+    public TaskResponseDTO salvar(Task task) {
+        var tarefaSalva = repository.save(task);
+        return new TaskResponseDTO(
+                tarefaSalva.getId(),
+                tarefaSalva.getTitle(),
+                tarefaSalva.getDescription(),
+                tarefaSalva.getStatus()
+        );
     }
 
-    //DELETA TASK
-    public void deletar(UUID id){
-        repository.deleteById(id);
-    }
-    // BUSCA TODAS AS LISTAS
-    public List<Task> findAll(){
+    public List<Task> listar() {
         return repository.findAll();
     }
 
-    public Task findById(UUID id){
-        return repository.findById(id).orElseThrow(() -> new RuntimeException("Not found"));
+    public TaskResponseDTO buscarPorId(Long id) {
+        Task task = repository.findById(id).orElseThrow(() -> new RuntimeException("Tarefa não encontrada"));
+        return toResponse(task);
     }
-    public Task update(UUID id,Task task){
-        Task task1 = findById(id);
-        task.setTitle(task.getTitle());
-        task.setDescription(task.getDescription());
-        task.setStatus(task.getStatus());
-        return repository.save(task1);
+    public void deletar(Long id) {
+        if (!repository.existsById(id)) {
+            throw new RuntimeException("Tarefa não encontrada");
+        }
+        repository.deleteById(id);
+    }
+
+    public TaskResponseDTO atualizar(Long id, TaskRequestDTO requestDTO) {
+        Task task = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Tarefa não encontrada"));
+
+        task.setTitle(requestDTO.title());
+        task.setDescription(requestDTO.description());
+        task.setStatus(requestDTO.status());
+
+        Task updatedTask = repository.save(task);
+        return toResponse(updatedTask);
+    }
+    private TaskResponseDTO toResponse(Task task) {
+        return new TaskResponseDTO(
+                task.getId(),
+                task.getTitle(),
+                task.getDescription(),
+                task.getStatus()
+        );
     }
 }

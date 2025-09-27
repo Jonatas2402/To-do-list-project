@@ -13,10 +13,9 @@ public class Task {
    @Id
    @Column(name = "id")
    @GeneratedValue
-   private UUID id;
+   private Long id;
 
    @Column(name = "title", nullable = false)
-   @NotBlank(message = "Campo Obrigatório")
    private String title;
 
    @Column(name = "description", nullable = false)
